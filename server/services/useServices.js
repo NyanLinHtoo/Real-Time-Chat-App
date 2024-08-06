@@ -76,4 +76,36 @@ const loginUserService = async (req, res) => {
   }
 };
 
-module.exports = { registerUserService, loginUserService };
+// @desc find user
+// @route Get /api/users/find/:userId
+// @access public
+const findUserService = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const user = await userModel.findById(userId);
+    res.status(200).json({ user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// @desc get all users
+// @route Get /api/users/
+// @access public
+const getUserService = async (req, res) => {
+  try {
+    const user = await userModel.find();
+    res.status(200).json({ user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = {
+  registerUserService,
+  loginUserService,
+  findUserService,
+  getUserService,
+};
