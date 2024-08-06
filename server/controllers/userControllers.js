@@ -1,7 +1,14 @@
-const { registerUserService } = require("../services/useServices");
+const {
+  registerUserService,
+  loginUserService,
+} = require("../services/useServices");
 
 const registerUser = (req, res) => {
   registerUserService(req, res);
 };
 
-module.exports = { registerUser };
+const loginUser = (req, res) => {
+  loginUserService(req, res);
+};
+
+module.exports = { registerUser, loginUser };
