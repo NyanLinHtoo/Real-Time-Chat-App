@@ -1,9 +1,12 @@
+import { Container } from "@mui/material";
 import AppRouter from "./config/AppRouter";
 
 const App = () => {
   return (
     <>
-      <AppRouter />
+      <Container maxWidth="lg">
+        <AppRouter />
+      </Container>
     </>
   );
 };
