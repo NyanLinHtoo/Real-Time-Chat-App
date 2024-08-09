@@ -8,22 +8,30 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Chat from "../pages/Chat";
 import NavBar from "../components/NavBar";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 import { Container } from "@mui/material";
 
 const AppRouter = () => {
+  const { user } = useContext(AuthContext);
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: <NavBarLayout />,
       children: [
-        { path: "chat", element: <Chat /> },
+        {
+          index: true,
+          element: user ? <Navigate to="/chat" /> : <Navigate to="/login" />,
+        },
+        { path: "/chat", element: user ? <Chat /> : <Navigate to="/login" /> },
         {
           path: "/login",
-          element: <Login />,
+          element: user ? <Navigate to="/chat" /> : <Login />,
         },
         {
           path: "/register",
-          element: <Register />,
+          element: user ? <Navigate to="/chat" /> : <Register />,
         },
       ],
     },

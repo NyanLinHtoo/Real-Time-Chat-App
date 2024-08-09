@@ -1,7 +1,9 @@
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Container,
   createTheme,
-  Link,
   Stack,
   ThemeProvider,
   Toolbar,
@@ -9,6 +11,10 @@ import {
 } from "@mui/material";
 
 const NavBar = () => {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const theme = createTheme({
     components: {
       MuiContainer: {
@@ -21,6 +27,20 @@ const NavBar = () => {
     },
   });
 
+  const handleNavigation = (path) => {
+    if (user) {
+      console.log("I have user");
+      if (location.pathname !== "/chat") {
+        navigate("/chat", { replace: true });
+      }
+    } else {
+      console.log("No user");
+      if (location.pathname !== path) {
+        navigate(path, { replace: true });
+      }
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container
@@ -32,39 +52,40 @@ const NavBar = () => {
           <Typography
             variant="h5"
             component="div"
-            sx={{ backgroundColor: "inherit" }}>
-            <Link
-              href="/chat"
-              underline="none"
-              color="inherit"
-              sx={{ backgroundColor: "inherit" }}>
-              ChapApp
-            </Link>
+            sx={{ backgroundColor: "inherit", cursor: "pointer" }}
+            onClick={() => handleNavigation("/chat")}>
+            ChapApp
           </Typography>
 
-          <Typography variant="body2" sx={{ backgroundColor: "inherit" }}>
-            logged in as Nyan Lin Htoo
-          </Typography>
+          {user && (
+            <Typography variant="body2" sx={{ backgroundColor: "inherit" }}>
+              logged in as {user.name}
+            </Typography>
+          )}
 
           <Stack
             direction="row"
             spacing={2}
             alignItems="center"
             sx={{ backgroundColor: "inherit" }}>
-            <Link
-              href="/login"
-              underline="none"
-              color="inherit"
-              sx={{ backgroundColor: "inherit" }}>
+            <Typography
+              onClick={() => handleNavigation("/login")}
+              sx={{
+                backgroundColor: "inherit",
+                cursor: "pointer",
+                color: "inherit",
+              }}>
               Login
-            </Link>
-            <Link
-              href="/register"
-              underline="none"
-              color="inherit"
-              sx={{ backgroundColor: "inherit" }}>
+            </Typography>
+            <Typography
+              onClick={() => handleNavigation("/register")}
+              sx={{
+                backgroundColor: "inherit",
+                cursor: "pointer",
+                color: "inherit",
+              }}>
               Register
-            </Link>
+            </Typography>
           </Stack>
         </Toolbar>
       </Container>

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { userService } from "../services/apiServices";
 import { toast } from "sonner";
@@ -14,6 +14,14 @@ export const AuthContextProvider = ({ children }) => {
     email: "",
     password: "",
   });
+
+  console.log("User ==>", user);
+
+  useEffect(() => {
+    const user = localStorage.getItem("User");
+
+    setUser(JSON.parse(user));
+  }, []);
 
   const updateRegisterInfo = useCallback((info) => {
     setRegisterInfo(info);
