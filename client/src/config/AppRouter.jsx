@@ -24,7 +24,7 @@ const AppRouter = () => {
         {
           path: "/register",
           element: <Register />,
-        }, // Define a Home component or route here if needed
+        },
       ],
     },
 
@@ -41,7 +41,7 @@ const NavBarLayout = () => {
   return (
     <>
       <NavBar />
-      <Container maxWidth="lg">
+      <Container>
         <Outlet />
       </Container>
     </>

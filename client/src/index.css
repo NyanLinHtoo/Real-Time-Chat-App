@@ -15,5 +15,10 @@
 body {
   color: white;
   font-family: "Barlow", sans-serif;
-  background: rgb(40, 40, 40);
+  /* background: rgb(40, 40, 40); */
+  margin: 0px;
+}
+
+.custom-container {
+  padding: 0 !important;
 }
