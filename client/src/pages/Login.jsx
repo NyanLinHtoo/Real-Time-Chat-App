@@ -1,6 +1,7 @@
-import { Stack, Button, TextField, Typography, Alert } from "@mui/material";
+import { useContext } from "react";
+import { Stack, Button, TextField, Typography } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 // Create a custom theme
 const theme = createTheme({
@@ -67,31 +68,14 @@ const theme = createTheme({
 });
 
 const Login = () => {
-  const [formValues, setFormValues] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [id]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log("Form values:", formValues);
-  };
+  const { loginInfo, updateLoginInfo, loginUser, isLoading } =
+    useContext(AuthContext);
 
   return (
     <ThemeProvider theme={theme}>
       <Stack
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={loginUser}
         noValidate
         autoComplete="off"
         spacing={3}>
@@ -106,8 +90,10 @@ const Login = () => {
           id="email"
           label="Email"
           variant="filled"
-          value={formValues.email}
-          onChange={handleChange}
+          // value={formValues.email}
+          onChange={(e) => {
+            updateLoginInfo({ ...loginInfo, email: e.target.value });
+          }}
           fullWidth
         />
         <TextField
@@ -116,14 +102,15 @@ const Login = () => {
           label="Password"
           type="password"
           variant="filled"
-          value={formValues.password}
-          onChange={handleChange}
+          // value={formValues.password}
+          onChange={(e) => {
+            updateLoginInfo({ ...loginInfo, password: e.target.value });
+          }}
           fullWidth
         />
         <Button type="submit" variant="contained" fullWidth>
-          Login
+          {isLoading ? "Getting you in..." : "Login"}
         </Button>
-        <Alert severity="error">This is an error Alert.</Alert>
       </Stack>
     </ThemeProvider>
   );

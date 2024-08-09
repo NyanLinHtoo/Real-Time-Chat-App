@@ -9,6 +9,10 @@ class HttpClient {
   register(payload) {
     return apiClient.post(this.#endPoint + "/register", payload);
   }
+
+  login(payload) {
+    return apiClient.post(this.#endPoint + "/login", payload);
+  }
 }
 
 const create = (endPoint) => {
