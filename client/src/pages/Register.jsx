@@ -1,6 +1,7 @@
+import { useContext } from "react";
 import { Stack, Button, TextField, Typography, Alert } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 // Create a custom theme
 const theme = createTheme({
@@ -67,24 +68,12 @@ const theme = createTheme({
 });
 
 const Register = () => {
-  const [formValues, setFormValues] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [id]: value,
-    }));
-  };
+  const { registerInfo, updateRegisterInfo } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission
-    console.log("Form values:", formValues);
+    // console.log("Form values:", formValues);
   };
 
   return (
@@ -106,8 +95,10 @@ const Register = () => {
           id="name"
           label="Name"
           variant="filled"
-          value={formValues.name}
-          onChange={handleChange}
+          // value={formValues.name}
+          onChange={(e) => {
+            updateRegisterInfo({ ...registerInfo, name: e.target.value });
+          }}
           fullWidth
         />
         <TextField
@@ -115,8 +106,10 @@ const Register = () => {
           id="email"
           label="Email"
           variant="filled"
-          value={formValues.email}
-          onChange={handleChange}
+          // value={formValues.email}
+          onChange={(e) => {
+            updateRegisterInfo({ ...registerInfo, email: e.target.value });
+          }}
           fullWidth
         />
         <TextField
@@ -125,8 +118,10 @@ const Register = () => {
           label="Password"
           type="password"
           variant="filled"
-          value={formValues.password}
-          onChange={handleChange}
+          // value={formValues.password}
+          onChange={(e) => {
+            updateRegisterInfo({ ...registerInfo, password: e.target.value });
+          }}
           fullWidth
         />
         <Button type="submit" variant="contained" fullWidth>
