@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   Container,
   createTheme,
@@ -11,7 +12,7 @@ import {
 } from "@mui/material";
 
 const NavBar = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -29,16 +30,38 @@ const NavBar = () => {
 
   const handleNavigation = (path) => {
     if (user) {
-      console.log("I have user");
       if (location.pathname !== "/chat") {
         navigate("/chat", { replace: true });
       }
     } else {
-      console.log("No user");
       if (location.pathname !== path) {
         navigate(path, { replace: true });
       }
     }
+  };
+
+  const handleLogout = (path) => {
+    logoutUser();
+    navigate(path, { replace: true });
+  };
+
+  const NavItem = ({ text, path, onClick }) => (
+    <Typography
+      onClick={onClick || (() => handleNavigation(path))}
+      sx={{
+        backgroundColor: "inherit",
+        cursor: "pointer",
+        color: "inherit",
+      }}>
+      {text}
+    </Typography>
+  );
+
+  // Add prop types for NavItem
+  NavItem.propTypes = {
+    text: PropTypes.string.isRequired,
+    path: PropTypes.string,
+    onClick: PropTypes.func,
   };
 
   return (
@@ -68,29 +91,21 @@ const NavBar = () => {
             spacing={2}
             alignItems="center"
             sx={{ backgroundColor: "inherit" }}>
-            <Typography
-              onClick={() => handleNavigation("/login")}
-              sx={{
-                backgroundColor: "inherit",
-                cursor: "pointer",
-                color: "inherit",
-              }}>
-              Login
-            </Typography>
-            <Typography
-              onClick={() => handleNavigation("/register")}
-              sx={{
-                backgroundColor: "inherit",
-                cursor: "pointer",
-                color: "inherit",
-              }}>
-              Register
-            </Typography>
+            {user ? (
+              <NavItem text="Logout" onClick={handleLogout} />
+            ) : (
+              <>
+                <NavItem text="Login" path="/login" />
+                <NavItem text="Register" path="/register" />
+              </>
+            )}
           </Stack>
         </Toolbar>
       </Container>
     </ThemeProvider>
   );
 };
+
+// Add prop types for NavItem
 
 export default NavBar;
