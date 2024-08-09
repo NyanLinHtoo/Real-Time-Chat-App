@@ -16,25 +16,23 @@ const registerUserService = async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      res.status(400);
-      throw new Error("All Field are required");
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     let user = await userModel.findOne({ email });
 
     if (user) {
-      res.status(400);
-      throw new Error("Email is already taken");
+      return res.status(400).json({ message: "Email is already taken" });
     }
 
     if (!validator.isEmail(email)) {
-      res.status(400);
-      throw new Error("Email must be vaild email");
+      return res.status(400).json({ message: "Email must be a valid email" });
     }
 
     if (!validator.isStrongPassword(password)) {
-      res.status(400);
-      throw new Error("Password must be a strong password");
+      return res
+        .status(400)
+        .json({ message: "Password must be a strong password" });
     }
 
     user = new userModel({ name, email, password });
@@ -43,10 +41,10 @@ const registerUserService = async (req, res) => {
 
     const token = createToken(user._id);
 
-    res.status(200).json({ _id: user._id, name, email, token });
+    return res.status(200).json({ _id: user._id, name, email, token });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -58,21 +56,21 @@ const loginUserService = async (req, res) => {
   try {
     let user = await userModel.findOne({ email });
     if (!user) {
-      res.status(400);
-      throw new Error("Invalid email");
+      return res.status(400).json({ message: "Invalid email" });
     }
 
-    const isValudPassword = await bcrypt.compare(password, user.password);
-    if (!isValudPassword) {
-      res.status(400);
-      throw new Error("Invalid password");
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(400).json({ message: "Invalid Password" });
     }
 
     const token = createToken(user._id);
-    res.status(200).json({ _id: user._id, name: user.name, email, token });
+    return res
+      .status(200)
+      .json({ _id: user._id, name: user.name, email, token });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 

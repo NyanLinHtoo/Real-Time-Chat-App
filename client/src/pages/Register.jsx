@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Stack, Button, TextField, Typography, Alert } from "@mui/material";
+import { Stack, Button, TextField, Typography } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AuthContext } from "../context/AuthContext";
 
@@ -68,19 +68,14 @@ const theme = createTheme({
 });
 
 const Register = () => {
-  const { registerInfo, updateRegisterInfo } = useContext(AuthContext);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission
-    // console.log("Form values:", formValues);
-  };
+  const { registerInfo, updateRegisterInfo, registerUser, isRegisterLoading } =
+    useContext(AuthContext);
 
   return (
     <ThemeProvider theme={theme}>
       <Stack
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={registerUser}
         noValidate
         autoComplete="off"
         spacing={3}>
@@ -125,9 +120,8 @@ const Register = () => {
           fullWidth
         />
         <Button type="submit" variant="contained" fullWidth>
-          Register
+          {isRegisterLoading ? "Creating your account" : "Register"}
         </Button>
-        <Alert severity="error">This is an error Alert.</Alert>
       </Stack>
     </ThemeProvider>
   );
