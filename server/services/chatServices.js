@@ -4,6 +4,8 @@ const chatModel = require("../models/chatModel");
 // @access private
 const createChatService = async (req, res) => {
   const { firstId, secondId } = req.body;
+  console.log("First Id", firstId);
+  console.log("Second Id", secondId);
 
   try {
     const chat = await chatModel.findOne({

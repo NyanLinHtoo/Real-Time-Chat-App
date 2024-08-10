@@ -81,8 +81,11 @@ const NavBar = () => {
           </Typography>
 
           {user && (
-            <Typography variant="body2" sx={{ backgroundColor: "inherit" }}>
-              logged in as {user.name}
+            <Typography
+              variant="body2"
+              sx={{ backgroundColor: "inherit", color: "#F6F8C3" }}>
+              Logged in as{" "}
+              {user.name.charAt(0).toUpperCase() + user.name.slice(1)}
             </Typography>
           )}
 

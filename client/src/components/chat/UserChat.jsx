@@ -24,7 +24,8 @@ const theme = createTheme({
             marginBottom: "10px",
             marginTop: "10px",
             cursor: "pointer",
-            width: "150%",
+            width: "100%",
+            textAlign: "left",
             "&:hover": {
               backgroundColor: "#e0e0e0",
             },
@@ -59,16 +60,6 @@ const theme = createTheme({
               marginRight: "15px",
             },
           },
-          "&.user-online": {
-            "& .MuiBadge-badge": {
-              backgroundColor: "#17db17",
-              width: "10px",
-              height: "10px",
-              borderRadius: "50%",
-              minWidth: "10px",
-              padding: "7px",
-            },
-          },
         },
       },
     },
@@ -77,8 +68,6 @@ const theme = createTheme({
 
 const UserChat = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipientUser(chat, user);
-
-  console.log("recipientUser=>", recipientUser);
 
   return (
     <ThemeProvider theme={theme}>
@@ -107,8 +96,8 @@ const UserChat = ({ chat, user }) => {
               variant="dot"
               sx={{
                 position: "absolute",
-                top: -8,
-                right: -9,
+                top: -15,
+                right: -15,
               }}
             />
           </Box>
@@ -121,7 +110,7 @@ const UserChat = ({ chat, user }) => {
 
 UserChat.propTypes = {
   chat: PropTypes.shape({
-    members: PropTypes.arrayOf(PropTypes.string).isRequired,
+    members: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   user: PropTypes.object,
 };

@@ -48,7 +48,6 @@ const AppRouter = () => {
 
 const NavBarLayout = () => {
   const { user } = useContext(AuthContext);
-  console.log("User in AppRouter => ", user);
 
   return (
     <ChatContextProvider user={user}>

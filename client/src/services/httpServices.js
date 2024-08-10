@@ -14,8 +14,12 @@ class HttpClient {
     return apiClient.get(this.#endPoint + "/" + id);
   }
 
-  fineUser(id) {
+  findUser(id) {
     return apiClient.get(this.#endPoint + "/find/" + id);
+  }
+
+  createChat(firstId, secondId) {
+    return apiClient.post(this.#endPoint + "/", firstId, secondId);
   }
 
   register(payload) {

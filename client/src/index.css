@@ -23,3 +23,15 @@ body {
   padding: 0 !important;
   margin: 0 !important;
 }
+
+.user-online {
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #17db17;
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  z-index: 2;
+}
