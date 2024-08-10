@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv").config();
 const connectDb = require("./config/dbConnection");
 const user_Route = require("./routes/userRoute");
+const chat_Route = require("./routes/chatRoute");
 
 const app = express();
 const port = process.env.PORT;
@@ -16,6 +17,7 @@ app.use(
 );
 
 app.use("/api/users", user_Route);
+app.use("/api/chats", chat_Route);
 
 app.listen(port, () => {
   console.log(`Server is running at ${port}`);
