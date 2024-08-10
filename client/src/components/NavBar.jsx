@@ -40,9 +40,9 @@ const NavBar = () => {
     }
   };
 
-  const handleLogout = (path) => {
+  const handleLogout = () => {
     logoutUser();
-    navigate(path, { replace: true });
+    navigate("/login");
   };
 
   const NavItem = ({ text, path, onClick }) => (

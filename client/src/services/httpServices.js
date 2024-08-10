@@ -6,6 +6,14 @@ class HttpClient {
     this.#endPoint = endPoint;
   }
 
+  getAll() {
+    return apiClient.get(this.#endPoint + "/");
+  }
+
+  getOne(id) {
+    return apiClient.get(this.#endPoint + "/" + id);
+  }
+
   register(payload) {
     return apiClient.post(this.#endPoint + "/register", payload);
   }

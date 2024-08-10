@@ -1,9 +1,12 @@
+import { useContext } from "react";
 import {
   Container,
   createTheme,
   ThemeProvider,
   Typography,
+  CircularProgress,
 } from "@mui/material";
+import { ChatContext } from "../context/ChatContext";
 
 const Chat = () => {
   const theme = createTheme({
@@ -11,7 +14,6 @@ const Chat = () => {
       MuiTypography: {
         styleOverrides: {
           root: {
-            // paddingTop: "100px",
             color: "black",
           },
         },
@@ -19,13 +21,15 @@ const Chat = () => {
     },
   });
 
+  const { userChats, isLoading, error } = useContext(ChatContext);
+  console.log("User Chats => ", userChats);
+
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="lg">
         <Typography variant="h4" component="div">
           Chat Component
         </Typography>
-        {/* Your chat component content goes here */}
       </Container>
     </ThemeProvider>
   );

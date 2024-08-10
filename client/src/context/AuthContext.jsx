@@ -20,7 +20,7 @@ export const AuthContextProvider = ({ children }) => {
   });
 
   // console.log("registerInfo ==>", registerInfo);
-  console.log("loginInfo ==>", loginInfo);
+  // console.log("loginInfo ==>", loginInfo);
 
   useEffect(() => {
     const user = localStorage.getItem("User");

@@ -11,6 +11,7 @@ import NavBar from "../components/NavBar";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 import { Container } from "@mui/material";
+import { ChatContextProvider } from "../context/ChatContext";
 
 const AppRouter = () => {
   const { user } = useContext(AuthContext);
@@ -46,13 +47,16 @@ const AppRouter = () => {
 };
 
 const NavBarLayout = () => {
+  const { user } = useContext(AuthContext);
+  console.log("User in AppRouter => ", user);
+
   return (
-    <>
+    <ChatContextProvider user={user}>
       <NavBar />
       <Container>
         <Outlet />
       </Container>
-    </>
+    </ChatContextProvider>
   );
 };
 
