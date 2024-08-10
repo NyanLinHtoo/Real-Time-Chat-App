@@ -24,6 +24,8 @@ export const ChatContextProvider = ({ children, user }) => {
           toast.error(res.data.error || res.data.message);
           return;
         }
+        setIsLoading(false);
+
         setUserChats(res.data);
       } catch (error) {
         setIsLoading(false);

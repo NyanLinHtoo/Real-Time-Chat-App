@@ -14,6 +14,10 @@ class HttpClient {
     return apiClient.get(this.#endPoint + "/" + id);
   }
 
+  fineUser(id) {
+    return apiClient.get(this.#endPoint + "/find/" + id);
+  }
+
   register(payload) {
     return apiClient.post(this.#endPoint + "/register", payload);
   }

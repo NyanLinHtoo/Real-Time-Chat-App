@@ -53,7 +53,7 @@ const NavBarLayout = () => {
   return (
     <ChatContextProvider user={user}>
       <NavBar />
-      <Container>
+      <Container maxWidth={false}>
         <Outlet />
       </Container>
     </ChatContextProvider>
