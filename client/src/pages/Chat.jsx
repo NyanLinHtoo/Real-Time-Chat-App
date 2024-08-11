@@ -12,10 +12,12 @@ import { ChatContext } from "../context/ChatContext";
 import UserChat from "../components/chat/UserChat";
 import { AuthContext } from "../context/AuthContext";
 import PotentialChats from "../components/chat/PotentialChats";
+import ChatBox from "../components/chat/ChatBox";
 
 const Chat = () => {
   const { user } = useContext(AuthContext);
-  const { userChats, isLoading, error } = useContext(ChatContext);
+  const { userChats, isLoading, error, updateCurrentChat } =
+    useContext(ChatContext);
 
   const theme = createTheme({
     components: {
@@ -56,26 +58,39 @@ const Chat = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth={false} sx={{ padding: 0, overflowX: "hidden" }}>
+      <Container maxWidth={false} sx={{ padding: 0, overflowX: "auto" }}>
         <Stack sx={{ minHeight: "60px" }}>
           <PotentialChats />
         </Stack>
-        <Stack direction="row" spacing={3}>
-          <Box className="chatList" sx={{ width: "280px" }}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={3}
+          sx={{ height: "calc(100vh - 15vh)" }}>
+          <Box
+            className="chatList"
+            sx={{
+              width: { xs: "100%", md: "280px" },
+              height: { xs: "auto", md: "100%" },
+              overflowY: "none",
+            }}>
             {error && <Typography color="error">{error}</Typography>}
             {isLoading && <CircularProgress size={24} />}
             {userChats &&
               userChats?.map((chat, index) => {
                 return (
-                  <div key={index}>
+                  <div key={index} onClick={() => updateCurrentChat(chat)}>
                     <UserChat chat={chat} user={user} />
                   </div>
                 );
               })}
           </Box>
-          <Box className="chatMessages">
-            <Typography variant="body2">Chat Messages</Typography>
-            {/* Add your chat messages content here */}
+          <Box
+            className="chatMessages"
+            sx={{
+              width: { xs: "100%", md: "580px" },
+              height: { xs: "calc(100vh - 60px - 280px)", md: "100%" },
+            }}>
+            <ChatBox />
           </Box>
         </Stack>
       </Container>

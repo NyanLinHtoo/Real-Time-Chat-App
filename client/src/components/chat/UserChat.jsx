@@ -24,7 +24,7 @@ const theme = createTheme({
             marginBottom: "10px",
             marginTop: "10px",
             cursor: "pointer",
-            width: "100%",
+            width: "98%",
             textAlign: "left",
             "&:hover": {
               backgroundColor: "#e0e0e0",

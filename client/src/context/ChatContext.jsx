@@ -1,6 +1,10 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { chatService, userService } from "../services/apiServices";
+import {
+  chatService,
+  messageService,
+  userService,
+} from "../services/apiServices";
 import { toast } from "sonner";
 
 export const ChatContext = createContext();
@@ -10,6 +14,8 @@ export const ChatContextProvider = ({ children, user }) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [potentialChats, setPotentialChats] = useState([]);
+  const [currentChat, setCurrentChat] = useState(null);
+  const [messages, setMessages] = useState(null);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -71,6 +77,40 @@ export const ChatContextProvider = ({ children, user }) => {
     getUserChats();
   }, [user]);
 
+  useEffect(() => {
+    const getMessages = async () => {
+      // if (!user || !user._id) return;
+
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await messageService.getOne(currentChat?._id);
+
+        if (res.data.error || res.data.message) {
+          setError(res.data.error || res.data.message);
+          toast.error(res.data.error || res.data.message);
+          return;
+        }
+        setIsLoading(false);
+
+        setMessages(res.data);
+      } catch (error) {
+        setIsLoading(false);
+
+        const errorMessage =
+          error.response?.data?.message ||
+          "An error occurred during fetch getUserChats";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
+    };
+    getMessages();
+  }, [currentChat]);
+
+  const updateCurrentChat = useCallback((chat) => {
+    setCurrentChat(chat);
+  }, []);
+
   const createChat = useCallback(async (firstId, secondId) => {
     try {
       const res = await chatService.createChat({ firstId, secondId });
@@ -83,7 +123,16 @@ export const ChatContextProvider = ({ children, user }) => {
 
   return (
     <ChatContext.Provider
-      value={{ userChats, isLoading, error, potentialChats, createChat }}>
+      value={{
+        userChats,
+        isLoading,
+        error,
+        potentialChats,
+        createChat,
+        updateCurrentChat,
+        messages,
+        currentChat,
+      }}>
       {children}
     </ChatContext.Provider>
   );

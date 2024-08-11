@@ -35,3 +35,37 @@ body {
   right: -3px;
   z-index: 2;
 }
+
+.chatbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  color: white;
+  background: #316e99;
+}
+
+.messages {
+  max-height: calc(100vh - 15rem);
+  overflow-y: auto;
+  padding: 0 2rem;
+}
+
+.message {
+  color: white;
+  background: #282828;
+  padding: 0.75rem;
+  border-radius: 5px;
+  max-width: 50%;
+}
+
+.message.self {
+  color: white;
+  background: #00bd9b;
+}
+
+.message-footer {
+  font-size: 12px;
+  align-self: flex-end;
+  font-weight: 400;
+}
