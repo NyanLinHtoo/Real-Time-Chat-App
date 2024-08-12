@@ -10,6 +10,10 @@ class HttpClient {
     return apiClient.get(this.#endPoint + "/");
   }
 
+  createMessage(payload) {
+    return apiClient.post(this.#endPoint + "/", payload);
+  }
+
   getOne(id) {
     return apiClient.get(this.#endPoint + "/" + id);
   }

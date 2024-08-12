@@ -69,3 +69,18 @@ body {
   align-self: flex-end;
   font-weight: 400;
 }
+
+.react-input-emoji--button {
+  padding: 12px 20px;
+}
+.react-input-emoji--button svg {
+  fill: #fff;
+}
+
+/* .react-input-emoji--input {
+  width: 80%;
+} */
+
+.react-emoji {
+  width: 93%;
+}

@@ -16,6 +16,7 @@ export const ChatContextProvider = ({ children, user }) => {
   const [potentialChats, setPotentialChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState(null);
+  const [newMessages, setNewMessages] = useState(null);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -79,8 +80,6 @@ export const ChatContextProvider = ({ children, user }) => {
 
   useEffect(() => {
     const getMessages = async () => {
-      // if (!user || !user._id) return;
-
       setIsLoading(true);
       setError(null);
       try {
@@ -121,6 +120,42 @@ export const ChatContextProvider = ({ children, user }) => {
     }
   }, []);
 
+  const sentTextMessage = useCallback(
+    async (textMessage, sender, currentChatId, setTextMessage) => {
+      if (!textMessage) return console.log("You should type something...");
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await messageService.createMessage({
+          chatId: currentChatId,
+          senderId: sender._id,
+          text: textMessage,
+        });
+        console.log("RES ====");
+        console.log(res);
+
+        if (res.data.error || res.data.message) {
+          setError(res.data.error || res.data.message);
+          toast.error(res.data.error || res.data.message);
+          return;
+        }
+        setIsLoading(false);
+        setNewMessages(res.data);
+        setMessages((prev) => [...prev, res.data]);
+        setTextMessage("");
+      } catch (error) {
+        setIsLoading(false);
+
+        const errorMessage =
+          error.response?.data?.message ||
+          "An error occurred during fetch getUserChats";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
+    },
+    []
+  );
+
   return (
     <ChatContext.Provider
       value={{
@@ -132,6 +167,7 @@ export const ChatContextProvider = ({ children, user }) => {
         updateCurrentChat,
         messages,
         currentChat,
+        sentTextMessage,
       }}>
       {children}
     </ChatContext.Provider>

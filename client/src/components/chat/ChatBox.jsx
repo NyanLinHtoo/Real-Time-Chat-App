@@ -1,17 +1,28 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { ChatContext } from "../../context/ChatContext";
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
-import { Box, Card, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import moment from "moment";
+import InputEmoji from "react-input-emoji";
 
 const ChatBox = () => {
   const { user } = useContext(AuthContext);
-  const { currentChat, messages, isLoading } = useContext(ChatContext);
+  const { currentChat, messages, isLoading, sentTextMessage } =
+    useContext(ChatContext);
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
 
+  const [textMessage, setTextMessage] = useState("");
   //   console.log("Current Chat====> ", currentChat);
   //   console.log("recipient Chat====> ", recipientUser);
+  console.log("Text Message => ", textMessage);
 
   if (isLoading) {
     return (
@@ -81,6 +92,33 @@ const ChatBox = () => {
               </Box>
             );
           })}
+        </Box>
+        <Box
+          sx={{
+            paddingX: "15px",
+            backgroundColor: "#316e99",
+            display: "flex",
+            justifyContent: "space-between",
+          }}>
+          <InputEmoji
+            borderColor=" rgba(72,112,223,0.2)"
+            value={textMessage}
+            onChange={setTextMessage}
+            maxWidth="70%"
+          />
+          <IconButton
+            aria-label="send"
+            sx={{ color: "white", paddingBottom: "11px" }}
+            onClick={() =>
+              sentTextMessage(
+                textMessage,
+                user,
+                currentChat._id,
+                setTextMessage
+              )
+            }>
+            <SendIcon />
+          </IconButton>
         </Box>
       </Card>
     </Box>

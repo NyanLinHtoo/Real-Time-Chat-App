@@ -65,7 +65,7 @@ const Chat = () => {
         <Stack
           direction={{ xs: "column", md: "row" }}
           spacing={3}
-          sx={{ height: "calc(100vh - 15vh)" }}>
+          sx={{ height: "calc(100vh - 20vh)" }}>
           <Box
             className="chatList"
             sx={{
