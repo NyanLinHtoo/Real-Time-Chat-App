@@ -68,7 +68,7 @@ const theme = createTheme({
 });
 
 const Login = () => {
-  const { loginInfo, updateLoginInfo, loginUser, isLoading } =
+  const { loginInfo, updateLoginInfo, loginUser, isLoginLoading } =
     useContext(AuthContext);
 
   return (
@@ -109,7 +109,7 @@ const Login = () => {
           fullWidth
         />
         <Button type="submit" variant="contained" fullWidth>
-          {isLoading ? "Getting you in..." : "Login"}
+          {isLoginLoading ? "Getting you in..." : "Login"}
         </Button>
       </Stack>
     </ThemeProvider>

@@ -68,7 +68,7 @@ const theme = createTheme({
 });
 
 const Register = () => {
-  const { registerInfo, updateRegisterInfo, registerUser, isLoading } =
+  const { registerInfo, updateRegisterInfo, registerUser, isRegisterLoading } =
     useContext(AuthContext);
 
   return (
@@ -120,7 +120,7 @@ const Register = () => {
           fullWidth
         />
         <Button type="submit" variant="contained" fullWidth>
-          {isLoading ? "Creating your account" : "Register"}
+          {isRegisterLoading ? "Creating your account" : "Register"}
         </Button>
       </Stack>
     </ThemeProvider>

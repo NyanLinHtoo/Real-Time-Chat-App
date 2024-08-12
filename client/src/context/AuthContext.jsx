@@ -7,8 +7,10 @@ export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState(null);
+  const [isRegisterLoading, setIsRegisterLoading] = useState(false);
+  const [registerError, setRegisterError] = useState(null);
   const [registerInfo, setRegisterInfo] = useState({
     name: "",
     email: "",
@@ -36,14 +38,14 @@ export const AuthContextProvider = ({ children }) => {
   const registerUser = useCallback(
     async (e) => {
       e.preventDefault();
-      setIsLoading(true);
-      setError(null);
+      setIsRegisterLoading(true);
+      setRegisterError(null);
       try {
         const res = await userService.register(registerInfo);
-        setIsLoading(false);
+        setIsRegisterLoading(false);
 
         if (res.data.error || res.data.message) {
-          setError(res.data.error || res.data.message);
+          setRegisterError(res.data.error || res.data.message);
           toast.error(res.data.error || res.data.message);
           return;
         }
@@ -52,11 +54,11 @@ export const AuthContextProvider = ({ children }) => {
         setUser(res.data);
         toast.success("Registration successful!");
       } catch (error) {
-        setIsLoading(false);
+        setIsRegisterLoading(false);
         const errorMessage =
           error.response?.data?.message ||
           "An error occurred during registration";
-        setError(errorMessage);
+        setRegisterError(errorMessage);
         toast.error(errorMessage);
       }
     },
@@ -66,14 +68,14 @@ export const AuthContextProvider = ({ children }) => {
   const loginUser = useCallback(
     async (e) => {
       e.preventDefault();
-      setIsLoading(true);
-      setError(null);
+      setIsLoginLoading(true);
+      setLoginError(null);
       try {
         const res = await userService.login(loginInfo);
-        setIsLoading(false);
+        setIsLoginLoading(false);
 
         if (res.data.error || res.data.message) {
-          setError(res.data.error || res.data.message);
+          setLoginError(res.data.error || res.data.message);
           toast.error(res.data.error || res.data.message);
           return;
         }
@@ -82,10 +84,10 @@ export const AuthContextProvider = ({ children }) => {
         setUser(res.data);
         toast.success("Login successful!");
       } catch (error) {
-        setIsLoading(false);
+        setIsLoginLoading(false);
         const errorMessage =
           error.response?.data?.message || "An error occurred during login";
-        setError(errorMessage);
+        setLoginError(errorMessage);
         toast.error(errorMessage);
       }
     },
@@ -104,8 +106,10 @@ export const AuthContextProvider = ({ children }) => {
         registerInfo,
         updateRegisterInfo,
         registerUser,
-        error,
-        isLoading,
+        registerError,
+        isRegisterLoading,
+        isLoginLoading,
+        loginError,
         logoutUser,
         updateLoginInfo,
         loginUser,

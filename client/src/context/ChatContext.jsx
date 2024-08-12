@@ -11,19 +11,21 @@ export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children, user }) => {
   const [userChats, setUserChats] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isUserChatsLoading, setIsUserChatsLoading] = useState(false);
+  const [userChatsError, setUserChatsError] = useState(null);
   const [potentialChats, setPotentialChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState(null);
-  const [newMessages, setNewMessages] = useState(null);
+  const [isMessagesLoading, setIsMessagesLoading] = useState(false);
+  const [messagesError, setMessagesError] = useState(null);
+  const [sendTextMessageError, setSendTextMessageError] = useState(null);
+  const [newMessage, setNewMessages] = useState(null);
 
   useEffect(() => {
     const getUsers = async () => {
       const res = await userService.getAll();
 
       if (res.data.error || res.data.message) {
-        setError(res.data.error || res.data.message);
         toast.error(res.data.error || res.data.message);
         return;
       }
@@ -52,26 +54,26 @@ export const ChatContextProvider = ({ children, user }) => {
     const getUserChats = async () => {
       if (!user || !user._id) return;
 
-      setIsLoading(true);
-      setError(null);
+      setIsUserChatsLoading(true);
+      setUserChatsError(null);
       try {
         const res = await chatService.getOne(user._id);
 
         if (res.data.error || res.data.message) {
-          setError(res.data.error || res.data.message);
+          setUserChatsError(res.data.error || res.data.message);
           toast.error(res.data.error || res.data.message);
           return;
         }
-        setIsLoading(false);
+        setIsUserChatsLoading(false);
 
         setUserChats(res.data);
       } catch (error) {
-        setIsLoading(false);
+        setIsUserChatsLoading(false);
 
         const errorMessage =
           error.response?.data?.message ||
           "An error occurred during fetch getUserChats";
-        setError(errorMessage);
+        setUserChatsError(errorMessage);
         toast.error(errorMessage);
       }
     };
@@ -80,26 +82,26 @@ export const ChatContextProvider = ({ children, user }) => {
 
   useEffect(() => {
     const getMessages = async () => {
-      setIsLoading(true);
-      setError(null);
+      setIsMessagesLoading(true);
+      setMessagesError(null);
       try {
         const res = await messageService.getOne(currentChat?._id);
 
         if (res.data.error || res.data.message) {
-          setError(res.data.error || res.data.message);
+          setMessagesError(res.data.error || res.data.message);
           toast.error(res.data.error || res.data.message);
           return;
         }
-        setIsLoading(false);
+        setIsMessagesLoading(false);
 
         setMessages(res.data);
       } catch (error) {
-        setIsLoading(false);
+        setIsMessagesLoading(false);
 
         const errorMessage =
           error.response?.data?.message ||
           "An error occurred during fetch getUserChats";
-        setError(errorMessage);
+        setMessagesError(errorMessage);
         toast.error(errorMessage);
       }
     };
@@ -123,33 +125,28 @@ export const ChatContextProvider = ({ children, user }) => {
   const sentTextMessage = useCallback(
     async (textMessage, sender, currentChatId, setTextMessage) => {
       if (!textMessage) return console.log("You should type something...");
-      setIsLoading(true);
-      setError(null);
+
+      setSendTextMessageError(null);
       try {
         const res = await messageService.createMessage({
           chatId: currentChatId,
           senderId: sender._id,
           text: textMessage,
         });
-        console.log("RES ====");
-        console.log(res);
 
         if (res.data.error || res.data.message) {
-          setError(res.data.error || res.data.message);
+          setSendTextMessageError(res.data.error || res.data.message);
           toast.error(res.data.error || res.data.message);
           return;
         }
-        setIsLoading(false);
         setNewMessages(res.data);
         setMessages((prev) => [...prev, res.data]);
         setTextMessage("");
       } catch (error) {
-        setIsLoading(false);
-
         const errorMessage =
           error.response?.data?.message ||
           "An error occurred during fetch getUserChats";
-        setError(errorMessage);
+        setSendTextMessageError(errorMessage);
         toast.error(errorMessage);
       }
     },
@@ -160,13 +157,16 @@ export const ChatContextProvider = ({ children, user }) => {
     <ChatContext.Provider
       value={{
         userChats,
-        isLoading,
-        error,
+        isUserChatsLoading,
+        userChatsError,
         potentialChats,
         createChat,
         updateCurrentChat,
         messages,
+        isMessagesLoading,
+        messagesError,
         currentChat,
+        sendTextMessageError,
         sentTextMessage,
       }}>
       {children}

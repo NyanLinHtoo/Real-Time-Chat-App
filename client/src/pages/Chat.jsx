@@ -16,7 +16,7 @@ import ChatBox from "../components/chat/ChatBox";
 
 const Chat = () => {
   const { user } = useContext(AuthContext);
-  const { userChats, isLoading, error, updateCurrentChat } =
+  const { userChats, isUserChatsLoading, userChatsError, updateCurrentChat } =
     useContext(ChatContext);
 
   const theme = createTheme({
@@ -73,8 +73,10 @@ const Chat = () => {
               height: { xs: "auto", md: "100%" },
               overflowY: "none",
             }}>
-            {error && <Typography color="error">{error}</Typography>}
-            {isLoading && <CircularProgress size={24} />}
+            {userChatsError && (
+              <Typography color="error">{userChatsError}</Typography>
+            )}
+            {isUserChatsLoading && <CircularProgress size={24} />}
             {userChats &&
               userChats?.map((chat, index) => {
                 return (

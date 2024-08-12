@@ -15,16 +15,13 @@ import InputEmoji from "react-input-emoji";
 
 const ChatBox = () => {
   const { user } = useContext(AuthContext);
-  const { currentChat, messages, isLoading, sentTextMessage } =
+  const { currentChat, messages, isMessagesLoading, sentTextMessage } =
     useContext(ChatContext);
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
 
   const [textMessage, setTextMessage] = useState("");
-  //   console.log("Current Chat====> ", currentChat);
-  //   console.log("recipient Chat====> ", recipientUser);
-  console.log("Text Message => ", textMessage);
 
-  if (isLoading) {
+  if (isMessagesLoading) {
     return (
       <Box
         sx={{
