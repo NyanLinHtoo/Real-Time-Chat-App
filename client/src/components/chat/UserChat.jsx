@@ -10,6 +10,8 @@ import {
   Box,
 } from "@mui/material";
 import avator from "../../assets/undraw_male_avatar_g98d.svg";
+import { useContext } from "react";
+import { ChatContext } from "../../context/ChatContext";
 
 const theme = createTheme({
   components: {
@@ -68,6 +70,13 @@ const theme = createTheme({
 
 const UserChat = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipientUser(chat, user);
+  const { onlineUsers } = useContext(ChatContext);
+
+  const isOnline = onlineUsers?.some(
+    (user) => user?.userId === recipientUser?._id
+  );
+
+  console.log(isOnline);
 
   return (
     <ThemeProvider theme={theme}>
@@ -91,15 +100,17 @@ const UserChat = ({ chat, user }) => {
               alignItems: "center",
             }}>
             <Typography className="timestamp">10/08/2024</Typography>
-            <Badge
-              className="user-online"
-              variant="dot"
-              sx={{
-                position: "absolute",
-                top: -15,
-                right: -15,
-              }}
-            />
+            {isOnline && (
+              <Badge
+                className="user-online"
+                variant="dot"
+                sx={{
+                  position: "absolute",
+                  top: -15,
+                  right: -15,
+                }}
+              />
+            )}
           </Box>
           <Badge badgeContent={2} className="msg-count" />
         </Stack>

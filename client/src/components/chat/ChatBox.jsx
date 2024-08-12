@@ -44,7 +44,13 @@ const ChatBox = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        width: { xs: "100%", md: "600px" },
+      }}>
       <Card
         variant="outlined"
         sx={{

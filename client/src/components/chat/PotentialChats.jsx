@@ -5,7 +5,7 @@ import { Chip, Stack } from "@mui/material";
 
 const PotentialChats = () => {
   const { user } = useContext(AuthContext);
-  const { potentialChats, createChat } = useContext(ChatContext);
+  const { potentialChats, createChat, onlineUsers } = useContext(ChatContext);
 
   return (
     <Stack direction="row" spacing={2} sx={{ paddingTop: "10px" }}>
@@ -19,7 +19,9 @@ const PotentialChats = () => {
                 onClick={() => createChat(user._id, u._id)}
               />
 
-              <span className="user-online"></span>
+              {onlineUsers?.some((user) => user?.userId === u?._id) && (
+                <span className="user-online"></span>
+              )}
             </div>
           );
         })}

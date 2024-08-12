@@ -65,11 +65,11 @@ const Chat = () => {
         <Stack
           direction={{ xs: "column", md: "row" }}
           spacing={3}
-          sx={{ height: "calc(100vh - 20vh)" }}>
+          sx={{ height: "calc(100vh - 20vh)", justifyContent: "space-evenly" }}>
           <Box
             className="chatList"
             sx={{
-              width: { xs: "100%", md: "280px" },
+              width: { xs: "100%", md: "350px" },
               height: { xs: "auto", md: "100%" },
               overflowY: "none",
             }}>
