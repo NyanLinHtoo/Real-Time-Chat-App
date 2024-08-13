@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 export const useFetchLatestMessage = (chat) => {
   const { newMessage, notifications } = useContext(ChatContext);
-  const [lastestMessage, setLatestMessage] = useState(null);
+  const [latestMessage, setLatestMessage] = useState(null);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -18,7 +18,7 @@ export const useFetchLatestMessage = (chat) => {
         }
 
         const lastMessage = res.data[res.data?.length - 1];
-        console.log("Last Message =>", lastMessage);
+        console.log("Last Message =>", lastMessage.text);
 
         setLatestMessage(lastMessage);
       } catch (error) {
@@ -30,5 +30,5 @@ export const useFetchLatestMessage = (chat) => {
     };
     getMessages();
   }, [newMessage, notifications]);
-  return { lastestMessage };
+  return { latestMessage };
 };

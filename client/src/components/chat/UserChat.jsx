@@ -86,9 +86,12 @@ const UserChat = ({ chat, user }) => {
   );
 
   const truncateText = (text) => {
-    let shortText = text.substring(0, 20);
+    console.log("Text====");
+    console.log(text);
 
-    if (text.length > 20) {
+    let shortText = text.substring(0, 15);
+
+    if (text.length > 15) {
       shortText = shortText + "...";
     }
     return shortText;
