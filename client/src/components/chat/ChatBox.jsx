@@ -72,8 +72,8 @@ const ChatBox = () => {
           p: 0,
         }}>
         <Box className="chatbox-header" sx={{ mb: 2 }}>
-          <Typography variant="h6" sx={{ textAlign: "center" }}>
-            {recipientUser?.username || "Chat"}
+          <Typography variant="h6" sx={{ textAlign: "center", color: "white" }}>
+            {recipientUser?.name || "Chat"}
           </Typography>
         </Box>
         <Box sx={{ flexGrow: 1, overflowY: "auto", p: 2 }}>

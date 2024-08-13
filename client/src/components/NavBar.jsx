@@ -10,6 +10,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import Notification from "./chat/Notification";
 
 const NavBar = () => {
   const { user, logoutUser } = useContext(AuthContext);
@@ -95,7 +96,10 @@ const NavBar = () => {
             alignItems="center"
             sx={{ backgroundColor: "inherit" }}>
             {user ? (
-              <NavItem text="Logout" onClick={handleLogout} />
+              <>
+                <Notification />
+                <NavItem text="Logout" onClick={handleLogout} />
+              </>
             ) : (
               <>
                 <NavItem text="Login" path="/login" />

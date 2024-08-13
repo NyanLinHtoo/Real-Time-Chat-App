@@ -12,6 +12,9 @@ import {
 import avator from "../../assets/undraw_male_avatar_g98d.svg";
 import { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
+import { unreadNotiFunc } from "../../utils/unreadNotiFunc";
+import { useFetchLatestMessage } from "../../hooks/useFetchLatestMessage";
+import moment from "moment";
 
 const theme = createTheme({
   components: {
@@ -70,13 +73,26 @@ const theme = createTheme({
 
 const UserChat = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipientUser(chat, user);
-  const { onlineUsers } = useContext(ChatContext);
+  const { onlineUsers, notifications, markThisUserNotificationsAsRead } =
+    useContext(ChatContext);
+  const { latestMessage } = useFetchLatestMessage(chat);
 
+  const unreadNotifications = unreadNotiFunc(notifications);
+  const thisUserNotifications = unreadNotifications?.filter(
+    (n) => n.senderId == recipientUser?._id
+  );
   const isOnline = onlineUsers?.some(
     (user) => user?.userId === recipientUser?._id
   );
 
-  console.log(isOnline);
+  const truncateText = (text) => {
+    let shortText = text.substring(0, 20);
+
+    if (text.length > 20) {
+      shortText = shortText + "...";
+    }
+    return shortText;
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -84,12 +100,24 @@ const UserChat = ({ chat, user }) => {
         direction="row"
         sx={{ justifyContent: "space-between" }}
         className="userChatContainer"
-        component="button">
+        component="button"
+        onClick={() => {
+          if (thisUserNotifications?.length !== 0) {
+            markThisUserNotificationsAsRead(
+              thisUserNotifications,
+              notifications
+            );
+          }
+        }}>
         <Stack direction="row" spacing={2}>
           <Avatar src={avator} alt={recipientUser?.name}></Avatar>
           <Stack>
             <Typography className="userName">{recipientUser?.name}</Typography>
-            <Typography className="lastMessage">Text Message</Typography>
+            {latestMessage?.text && (
+              <Typography className="lastMessage">
+                {truncateText(latestMessage.text)}
+              </Typography>
+            )}
           </Stack>
         </Stack>
         <Stack spacing={2} alignItems="flex-end">
@@ -99,7 +127,9 @@ const UserChat = ({ chat, user }) => {
               display: "inline-flex",
               alignItems: "center",
             }}>
-            <Typography className="timestamp">10/08/2024</Typography>
+            <Typography className="timestamp">
+              {moment(latestMessage?.createdAt).calendar()}
+            </Typography>
             {isOnline && (
               <Badge
                 className="user-online"
@@ -112,7 +142,10 @@ const UserChat = ({ chat, user }) => {
               />
             )}
           </Box>
-          <Badge badgeContent={2} className="msg-count" />
+          <Badge
+            badgeContent={thisUserNotifications?.length}
+            className="msg-count"
+          />
         </Stack>
       </Stack>
     </ThemeProvider>
