@@ -24,7 +24,8 @@ export const useFetchRecipientUser = (chat, user) => {
         setRecipientUser(res.data.user);
       } catch (error) {
         const errorMessage =
-          error.response?.data?.message || "An error occurred during fetch";
+          error.response?.data?.message ||
+          "An error occurred during fetch get user in recipient";
         setError(errorMessage);
         toast.error(errorMessage);
       }

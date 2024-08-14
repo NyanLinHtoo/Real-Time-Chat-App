@@ -7,28 +7,23 @@ const io = new Server({
 let onlineUsers = [];
 
 io.on("connection", (socket) => {
-  console.log("Socket Id=>", socket.id);
-
   // listen to a connection
   socket.on("addNewUser", (userId) => {
     !onlineUsers.some((user) => user.userId === userId) &&
-      userId !== null &&
+      // userId !== null &&
       onlineUsers.push({
         userId,
         socketId: socket.id,
       });
-    console.log("OnlineUsers====", onlineUsers);
 
     io.emit("getOnlineUsers", onlineUsers);
   });
 
-  // send message
+  // add message
   socket.on("sendMessage", (message) => {
     const user = onlineUsers.find(
       (user) => user.userId === message.recipientId
     );
-
-    console.log("Message Reci", message.senderId);
 
     if (user) {
       io.to(user.socketId).emit("getMessage", message);

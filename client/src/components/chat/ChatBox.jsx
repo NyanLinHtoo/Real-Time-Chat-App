@@ -25,6 +25,14 @@ const ChatBox = () => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  if (!recipientUser) {
+    return (
+      <Typography variant="body1" sx={{ textAlign: "center", mt: 3 }}>
+        No conversation selected yet...
+      </Typography>
+    );
+  }
+
   if (!user) {
     return (
       <p style={{ textAlign: "center", width: "100%" }}>Loading User...</p>
@@ -42,14 +50,6 @@ const ChatBox = () => {
         }}>
         <CircularProgress color="success" />
       </Box>
-    );
-  }
-
-  if (!recipientUser) {
-    return (
-      <Typography variant="body1" sx={{ textAlign: "center", mt: 3 }}>
-        No conversation selected yet...
-      </Typography>
     );
   }
 
@@ -119,6 +119,17 @@ const ChatBox = () => {
             value={textMessage}
             onChange={setTextMessage}
             maxWidth="70%"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                sentTextMessage(
+                  textMessage,
+                  user,
+                  currentChat._id,
+                  setTextMessage
+                );
+                e.preventDefault();
+              }
+            }}
           />
           <IconButton
             aria-label="send"

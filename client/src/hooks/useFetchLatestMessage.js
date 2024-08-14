@@ -18,13 +18,12 @@ export const useFetchLatestMessage = (chat) => {
         }
 
         const lastMessage = res.data[res.data?.length - 1];
-        console.log("Last Message =>", lastMessage.text);
 
         setLatestMessage(lastMessage);
       } catch (error) {
         const errorMessage =
           error.response?.data?.message ||
-          "An error occurred during fetch getUserChats";
+          "An error occurred during fetch lastmessage";
         toast.error(errorMessage);
       }
     };

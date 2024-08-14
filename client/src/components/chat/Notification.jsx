@@ -10,13 +10,14 @@ import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { useContext, useState } from "react";
 import { ChatContext } from "../../context/ChatContext";
 import { AuthContext } from "../../context/AuthContext";
-import { unreadNotiFunc } from "../../utils/unreadNotiFunc";
+import { unreadNotificationsFunc } from "../../utils/unreadNotificationsFunc";
 import moment from "moment";
 
 const Notification = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
   const [placement, setPlacement] = useState();
+  const { user } = useContext(AuthContext);
   const {
     notifications,
     userChats,
@@ -24,14 +25,14 @@ const Notification = () => {
     markAllNotificationAsRead,
     markNotificationAsRead,
   } = useContext(ChatContext);
-  const { user } = useContext(AuthContext);
 
-  const unreadNotifications = unreadNotiFunc(notifications);
+  const unreadNotifications = unreadNotificationsFunc(notifications);
 
-  const modifiedNotifications = notifications.map((noti) => {
-    const sender = allUsers.find((user) => user._id === noti.senderId);
+  const modifiedNotifications = notifications.map((n) => {
+    const sender = allUsers.find((user) => user._id === n.senderId);
+
     return {
-      ...noti,
+      ...n,
       senderName: sender?.name,
     };
   });
@@ -50,7 +51,7 @@ const Notification = () => {
         </Badge>
       </IconButton>
       <Popper
-        sx={{ zIndex: 1 }}
+        sx={{ zIndex: 1200 }}
         open={open}
         anchorEl={anchorEl}
         placement={placement}
@@ -66,6 +67,8 @@ const Notification = () => {
                 borderRadius: "8px",
                 boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                 minWidth: "250px",
+                maxHeight: "500px",
+                overflowY: "auto",
               }}>
               <Box
                 sx={{
@@ -96,45 +99,40 @@ const Notification = () => {
                   No notifications yet...
                 </Typography>
               ) : (
-                modifiedNotifications.map((noti, index) => (
+                modifiedNotifications.map((n, index) => (
                   <Box
                     key={index}
                     sx={{
                       padding: "8px",
                       borderRadius: "6px",
-                      backgroundColor: noti.isRead ? "#f7f7f7" : "#d1e7ff",
+                      backgroundColor: n.isRead ? "#f7f7f7" : "#d1e7ff",
                       "&:hover": {
-                        backgroundColor: noti.isRead ? "#f0f0f0" : "#c4dbff",
+                        backgroundColor: n.isRead ? "#f0f0f0" : "#c4dbff",
                       },
                       cursor: "pointer",
                       marginBottom: "8px",
-                      boxShadow: noti.isRead
+                      boxShadow: n.isRead
                         ? "none"
                         : "0 2px 4px rgba(0, 0, 0, 0.1)",
                     }}
                     onClick={() => {
-                      markNotificationAsRead(
-                        noti,
-                        userChats,
-                        user,
-                        notifications
-                      );
+                      markNotificationAsRead(n, userChats, user, notifications);
                       setOpen(false);
                     }}>
                     <Typography
                       variant="subtitle1"
                       sx={{
-                        fontWeight: noti.isRead ? "normal" : "bold",
+                        fontWeight: n.isRead ? "normal" : "bold",
                       }}>
-                      {noti.senderName}
+                      {n.senderName}
                     </Typography>
                     <Typography variant="body2">
-                      {`${noti.senderName} sent you a new message`}
+                      {`${n.senderName} sent you a new message`}
                     </Typography>
                     <Typography
                       variant="caption"
                       sx={{ color: "#888", marginTop: "4px" }}>
-                      {moment(noti.date).calendar()}
+                      {moment(n.date).calendar()}
                     </Typography>
                   </Box>
                 ))

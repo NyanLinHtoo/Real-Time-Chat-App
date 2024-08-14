@@ -12,7 +12,7 @@ import {
 import avator from "../../assets/undraw_male_avatar_g98d.svg";
 import { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
-import { unreadNotiFunc } from "../../utils/unreadNotiFunc";
+import { unreadNotificationsFunc } from "../../utils/unreadNotificationsFunc";
 import { useFetchLatestMessage } from "../../hooks/useFetchLatestMessage";
 import moment from "moment";
 
@@ -77,18 +77,16 @@ const UserChat = ({ chat, user }) => {
     useContext(ChatContext);
   const { latestMessage } = useFetchLatestMessage(chat);
 
-  const unreadNotifications = unreadNotiFunc(notifications);
+  const unreadNotifications = unreadNotificationsFunc(notifications);
   const thisUserNotifications = unreadNotifications?.filter(
     (n) => n.senderId == recipientUser?._id
   );
+
   const isOnline = onlineUsers?.some(
     (user) => user?.userId === recipientUser?._id
   );
 
   const truncateText = (text) => {
-    console.log("Text====");
-    console.log(text);
-
     let shortText = text.substring(0, 15);
 
     if (text.length > 15) {
@@ -116,9 +114,13 @@ const UserChat = ({ chat, user }) => {
           <Avatar src={avator} alt={recipientUser?.name}></Avatar>
           <Stack>
             <Typography className="userName">{recipientUser?.name}</Typography>
-            {latestMessage?.text && (
+            {latestMessage?.text ? (
               <Typography className="lastMessage">
                 {truncateText(latestMessage.text)}
+              </Typography>
+            ) : (
+              <Typography className="lastMessage">
+                No message sent yet...
               </Typography>
             )}
           </Stack>

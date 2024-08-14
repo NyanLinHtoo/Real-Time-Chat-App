@@ -90,7 +90,6 @@ const Register = () => {
           id="name"
           label="Name"
           variant="filled"
-          // value={formValues.name}
           onChange={(e) => {
             updateRegisterInfo({ ...registerInfo, name: e.target.value });
           }}
@@ -101,7 +100,6 @@ const Register = () => {
           id="email"
           label="Email"
           variant="filled"
-          // value={formValues.email}
           onChange={(e) => {
             updateRegisterInfo({ ...registerInfo, email: e.target.value });
           }}
@@ -113,7 +111,6 @@ const Register = () => {
           label="Password"
           type="password"
           variant="filled"
-          // value={formValues.password}
           onChange={(e) => {
             updateRegisterInfo({ ...registerInfo, password: e.target.value });
           }}

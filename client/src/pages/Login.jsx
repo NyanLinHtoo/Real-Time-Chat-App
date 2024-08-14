@@ -90,7 +90,6 @@ const Login = () => {
           id="email"
           label="Email"
           variant="filled"
-          // value={formValues.email}
           onChange={(e) => {
             updateLoginInfo({ ...loginInfo, email: e.target.value });
           }}
@@ -102,7 +101,6 @@ const Login = () => {
           label="Password"
           type="password"
           variant="filled"
-          // value={formValues.password}
           onChange={(e) => {
             updateLoginInfo({ ...loginInfo, password: e.target.value });
           }}

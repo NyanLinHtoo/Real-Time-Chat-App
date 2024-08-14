@@ -7,8 +7,6 @@ export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoginLoading, setIsLoginLoading] = useState(false);
-  const [loginError, setLoginError] = useState(null);
   const [isRegisterLoading, setIsRegisterLoading] = useState(false);
   const [registerError, setRegisterError] = useState(null);
   const [registerInfo, setRegisterInfo] = useState({
@@ -16,6 +14,8 @@ export const AuthContextProvider = ({ children }) => {
     email: "",
     password: "",
   });
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState(null);
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
@@ -108,12 +108,12 @@ export const AuthContextProvider = ({ children }) => {
         registerUser,
         registerError,
         isRegisterLoading,
-        isLoginLoading,
-        loginError,
         logoutUser,
-        updateLoginInfo,
         loginUser,
+        loginError,
         loginInfo,
+        updateLoginInfo,
+        isLoginLoading,
       }}>
       {children}
     </AuthContext.Provider>
