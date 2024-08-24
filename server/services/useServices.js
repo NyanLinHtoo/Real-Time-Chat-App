@@ -18,10 +18,14 @@ const registerUserService = async (req, res) => {
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    let usename = await userModel.findOne({ name });
+    let userEmail = await userModel.findOne({ email });
 
-    let user = await userModel.findOne({ email });
+    if (usename) {
+      return res.status(400).json({ message: "Username is already taken" });
+    }
 
-    if (user) {
+    if (userEmail) {
       return res.status(400).json({ message: "Email is already taken" });
     }
 
@@ -29,11 +33,11 @@ const registerUserService = async (req, res) => {
       return res.status(400).json({ message: "Email must be a valid email" });
     }
 
-    if (!validator.isStrongPassword(password)) {
-      return res
-        .status(400)
-        .json({ message: "Password must be a strong password" });
-    }
+    // if (!validator.isStrongPassword(password)) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Password must be a strong password" });
+    // }
 
     user = new userModel({ name, email, password });
     user.password = await bcrypt.hash(user.password, 10);
