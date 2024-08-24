@@ -7,11 +7,13 @@ import {
   Card,
   CircularProgress,
   IconButton,
+  InputBase,
   Typography,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import moment from "moment";
-import InputEmoji from "react-input-emoji";
+import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
+import Picker from "@emoji-mart/react";
 
 const ChatBox = () => {
   const { user } = useContext(AuthContext);
@@ -19,11 +21,36 @@ const ChatBox = () => {
     useContext(ChatContext);
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState("");
+  const [isEmojiBoxOpen, setIsEmojiBoxOpen] = useState(false);
   const scroll = useRef();
+  const pickerRef = useRef(null);
 
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const handleEmojiSelect = (emoji) => {
+    setTextMessage(textMessage + emoji.native);
+  };
+
+  //to close emojibox when click outside and stick with emoji icon
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        isEmojiBoxOpen &&
+        pickerRef.current &&
+        !pickerRef.current.contains(e.target)
+      ) {
+        setIsEmojiBoxOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isEmojiBoxOpen]);
 
   if (!recipientUser) {
     return (
@@ -114,23 +141,64 @@ const ChatBox = () => {
             display: "flex",
             justifyContent: "space-between",
           }}>
-          <InputEmoji
-            borderColor=" rgba(72,112,223,0.2)"
-            value={textMessage}
-            onChange={setTextMessage}
-            maxWidth="70%"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                sentTextMessage(
-                  textMessage,
-                  user,
-                  currentChat._id,
-                  setTextMessage
-                );
+          <Box sx={{ display: "flex", width: "90%", position: "relative" }}>
+            <InputBase
+              multiline
+              sx={{
+                bgcolor: "white",
+                m: 1,
+                p: 1,
+                borderRadius: "5px",
+                whiteSpace: "pre-wrap",
+              }}
+              fullWidth
+              value={textMessage}
+              onChange={(e) => {
+                setTextMessage(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  sentTextMessage(
+                    textMessage,
+                    user,
+                    currentChat._id,
+                    setTextMessage
+                  );
+                  e.preventDefault();
+                }
+              }}
+            />
+            <IconButton
+              sx={{ color: "white", paddingBottom: "11px" }}
+              onClick={(e) => {
                 e.preventDefault();
-              }
-            }}
-          />
+                setIsEmojiBoxOpen(!isEmojiBoxOpen);
+              }}>
+              <EmojiEmotionsIcon />
+            </IconButton>
+          </Box>
+          {isEmojiBoxOpen && (
+            <div
+              ref={pickerRef}
+              style={{
+                position: "absolute",
+                bottom: "100px",
+                right: "40px",
+                zIndex: 1000,
+              }}>
+              <Picker
+                onEmojiSelect={handleEmojiSelect}
+                theme="dark"
+                style={{
+                  width: "400px",
+                  minWidth: "250px",
+                  resize: "horizontal",
+                  overflow: "auto",
+                }}
+                previewPosition="none"
+              />
+            </div>
+          )}
           <IconButton
             aria-label="send"
             sx={{ color: "white", paddingBottom: "11px" }}
