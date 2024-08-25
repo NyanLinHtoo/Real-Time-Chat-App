@@ -71,7 +71,7 @@ const Chat = () => {
             sx={{
               width: { xs: "100%", md: "350px" },
               height: { xs: "auto", md: "100%" },
-              overflowY: "none",
+              overflowY: "auto",
             }}>
             {userChatsError && (
               <Typography color="error">{userChatsError}</Typography>
